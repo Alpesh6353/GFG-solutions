@@ -1,41 +1,36 @@
 class Solution {
     public int leastWeightCapacity(ArrayList<Integer> arr, int D) {
         // code here
-        int n = arr.size();
-        int sum = 0;
+         int n = arr.size(); // length of weights array
+        int totalsum = 0;
         int max = Integer.MIN_VALUE;
-        int ans = 0;
         for(int i=0;i<n;i++){
             if(arr.get(i)>max) max = arr.get(i);
-            sum += arr.get(i);
+            totalsum += arr.get(i);
         }
-        int lo=max;
-        int hi = sum;
+        int lo = max;
+        int hi = totalsum;
+        int ans=0;
         while(lo<=hi){
+            int currentsum = 0;
+            int currentdays = 0;
             int mid = lo + (hi-lo)/2;
-            int count = 0;
-             int sum2 = 0;
             for(int i=0;i<n;i++){
-                sum2 += arr.get(i);
-                if(sum2==mid){
-                    count++;
-                    sum2 = 0;
+                if(currentsum + arr.get(i) <= mid){
+                    currentsum += arr.get(i);
                 }
-                else if(sum2>mid){
-                    count++;
-                    i--;
-                    sum2 = 0;
+                else {
+                    currentdays++;
+                    currentsum  = 0;
+                    currentsum += arr.get(i);
                 }
             }
-            if(sum2 != 0){
-                if(mid>sum2) count++;
-            }
-            if(count<=D){
+            currentdays++;
+            if(currentdays<=D){
                 ans = mid;
                 hi = mid-1;
             }
-            else if(count>D) lo = mid+1;
-            else hi = mid-1;
+            else lo = mid+1;
         }
         return ans;
     }
